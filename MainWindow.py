@@ -12,6 +12,7 @@ class MainWindow(tk.Tk):
         tk.Tk.__init__(self)
         self.title('porkit')
         self.resizable(0, 0)
+        self.config(bg=BGC)
         self._frame = None
         self.switch_frame(StartPage)
 
@@ -26,20 +27,20 @@ class MainWindow(tk.Tk):
 class StartPage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-
+        self.configure(bg=BGC)
         tk.Label(self, text="FileVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
-        tk.Button(self, text="Login", command=lambda: master.switch_frame(PageOne)).pack()
-        tk.Button(self, text="Register", command=lambda: master.switch_frame(PageTwo)).pack()
+        tk.Button(self, text="Login", command=lambda: master.switch_frame(LoginPage)).pack()
+        tk.Button(self, text="Register", command=lambda: master.switch_frame(RegisterPage)).pack()
 
 
-class PageOne(tk.Frame):
+class LoginPage(tk.Frame):
     def login(self):
-        self.master.switch_frame(App).pack()
+        self.master.switch_frame(AppViewPage).pack()
 
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        tk.Frame.configure(self, bg='blue')
-        tk.Label(self, text="Page one", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
+        tk.Frame.configure(self, bg= BGC)
+        tk.Label(self, text="Login", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         tk.Button(self, text="Go back to start page", command=lambda: master.switch_frame(StartPage)).pack()
         user_label = Label(self, text="User", bg=BGC, fg="white")
         user_label.pack()
@@ -53,14 +54,14 @@ class PageOne(tk.Frame):
         login_button.pack()
 
 
-class PageTwo(tk.Frame):
+class RegisterPage(tk.Frame):
     def register(self):
         print('register')
 
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        tk.Frame.configure(self, bg='red')
-        tk.Label(self, text="Page two", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
+        tk.Frame.configure(self, bg= BGC)
+        tk.Label(self, text="Register", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         tk.Button(self, text="Go back to start page", command=lambda: master.switch_frame(StartPage)).pack()
         user_label = Label(self, text="User", bg=BGC, fg="white")
         user_label.pack()
@@ -78,7 +79,7 @@ class PageTwo(tk.Frame):
         register_button.pack()
 
 
-class App(tk.Frame):
+class AppViewPage(tk.Frame):
     def quit(self):
         print('quit')
 
