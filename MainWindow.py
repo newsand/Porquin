@@ -1,14 +1,17 @@
 # greetings to https://www.delftstack.com/howto/python-tkinter/how-to-switch-frames-in-tkinter/
-
 try:
     import Tkinter as tk
 except:
     import tkinter as tk
 from tkinter import Label, Button, Entry, messagebox
 from dbase import *
+from FileBase import *
 
 db = Database()
 db.createTable()
+
+files = Filebase()
+files.createTable()
 
 BGC = "#123456"
 
