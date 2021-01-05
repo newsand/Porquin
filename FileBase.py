@@ -1,7 +1,5 @@
 # Importing Important Libraries
 import sqlite3
-import bcrypt
-
 
 class Filebase:
     '''
@@ -37,7 +35,7 @@ class Filebase:
         self.curr.execute(names_index)
         self.conn.commit()
 
-    def insertData(self, data):
+    def insertFile(self, data):
         '''
         Method for Insertig Data in Table in Database
         '''
@@ -48,7 +46,7 @@ class Filebase:
         self.curr.execute(insert_data, data)
         self.conn.commit()
 
-    def searchData(self, data):
+    def search_files_from_user(self, data):
         '''
         Method for Searching Data in Table in Database
         '''
@@ -60,3 +58,15 @@ class Filebase:
         rows = self.curr.fetchall()
         return rows
 
+    def search_file(self, data):
+        '''
+        Method for Searching Data in Table in Database
+        '''
+        search_data = '''
+        SELECT * FROM files WHERE owner = (?) and id  = (?);
+        '''
+        print(data)
+        print(search_data)
+        self.curr.execute(search_data, data)
+        rows = self.curr.fetchall()
+        return rows
