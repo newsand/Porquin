@@ -3,7 +3,6 @@ from io import BytesIO
 from math import floor
 import random
 
-
 import PIL
 from PIL import Image
 from PIL.ImageTk import PhotoImage
@@ -12,7 +11,7 @@ try:
     import Tkinter as tk
 except:
     import tkinter as tk
-from tkinter import Label, Button, Entry, messagebox, FLAT, BOTH
+from tkinter import Label, Button, Entry, messagebox, FLAT, BOTH, Menu
 from dbase import *
 from FileBase import *
 
@@ -29,7 +28,7 @@ class MainWindow(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self.title('porkit')
-        self.resizable(0,0)
+        self.resizable(0, 0)
         self.config(bg=BGC)
         self._frame = None
         self.switch_frame(StartPage)
@@ -142,59 +141,71 @@ class RegisterPage(tk.Frame):
 
 
 class AppViewPage(tk.Frame):
-    def quit(self):
-        print('quit')
+
+    def men_bar(self):
+        menubar = Menu(self)
+        file = Menu(menubar, tearoff=0)
+        file.add_command(label="New")
+        file.add_command(label="Open")
+        file.add_command(label="Save")
+        file.add_command(label="Save as...")
+
+        file.add_separator()
+        file.add_command(label="Close Session", command=lambda: self.master.switch_frame(StartPage))
+        file.add_command(label="Exit", command=self.master.quit)
+
+        menubar.add_cascade(label="File", menu=file)
+        edit = Menu(menubar, tearoff=0)
+        edit.add_command(label="Undo")
+
+        edit.add_separator()
+
+        edit.add_command(label="Cut")
+        edit.add_command(label="Copy")
+        edit.add_command(label="Paste")
+        edit.add_command(label="Delete")
+        edit.add_command(label="Select All")
+
+        menubar.add_cascade(label="Edit", menu=edit)
+        help_menu = Menu(menubar, tearoff=0)
+        help_menu.add_command(label="About")
+        menubar.add_cascade(label="Help", menu=help_menu)
+        self.master.config(menu=menubar)
+        return
+
+    def additem(self, widgetWrapper, item):
+        widgetWrapper.window_create("end", window=item)  # Put it inside the widget wrapper (the text)
 
     def __init__(self, master):
+        # configure frame
         tk.Frame.__init__(self, master)
-        tk.Frame.configure(self, bg='red')
-        tk.Label(self, text="Inside!", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
-        tk.Button(self, text="Go back to start page", command=lambda: master.switch_frame(StartPage)).pack()
+        tk.Frame.configure(self, bg=BGC)
+        self.master.resizable(1, 1)
+        self.men_bar()
+
+        # headers
+        tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
         hello_label.pack()
-        self.master.resizable(1, 1)
-        image = PIL.Image.open("mario.png")
-        # image.show()
-        filesarray = files.search_files_from_user((2,))
 
-
-
-        frame1 = tk.Frame(self, height=100, width=100, bg="GREY", borderwidth=2)
-        frame2 = tk.Frame(self, height=100, width=100, bg="BLUE", borderwidth=2)
-        frame1.pack()
-        frame2.pack()
+        # create the real Frame for images
+        image_list_frame = tk.Frame(self, height=100, width=100, bg=BGC, borderwidth=2)
+        image_list_frame.pack()
         # Create WidgetWrapper
-        widgetWrapper = tk.Text(frame1, wrap="char", borderwidth=0, highlightthickness=0, state="disabled",
-                                cursor="arrow")
         # state = "disabled" is to disable text from being input by user
-        # cursor = "arrow" is to ensure when user hovers, the "I" beam cursor (text cursor) is not displayed
+        # cursor = "arrow" is to ensure when user hovers, the arrow is displayed
+        widget_wrapper = tk.Text(image_list_frame, wrap="char", borderwidth=0, highlightthickness=0, state="disabled",
+                                 cursor="arrow", bg=BGC)
+        widget_wrapper.pack(fill="both", expand=True)
 
-        widgetWrapper.pack(fill="both", expand=True)
-
+        filesarray = files.search_files_from_user((2,))
         for iteration, x in enumerate(filesarray):
-            im = stream_toImage(x[3])
-            im.thumbnail((128, 128), Image.ANTIALIAS)
-            icon = PIL.ImageTk.PhotoImage(im)
-
             icon = generate_thumbnail(x[3])
-
-            sound_btn = tk.Button(frame1, image=icon, relief=FLAT, command=lambda lan=x: stream_toImage(lan[3]).show())
+            sound_btn = tk.Button(image_list_frame, image=icon, padx=20, relief= FLAT,
+                                  command=lambda lan=x: stream_toImage(lan[3]).show())
             sound_btn.image = icon
-            # sound_btn.pack()
-            additem(widgetWrapper, sound_btn)
+            self.additem(widget_wrapper, sound_btn)
             print(iteration)
-
-
-
-
-
-def additem(widgetWrapper,item):
-    #item = Button(bd = 5, relief="solid", text="O", bg="red",width=20, height=20) #Create the actual widgets
-    widgetWrapper.window_create("end", window=item) #Put it inside the widget wrapper (the text)
-
-
-
-
 
 
 def stream_toImage(stream) -> Image:
@@ -209,7 +220,6 @@ def generate_thumbnail(xablau) -> PhotoImage:
     im.thumbnail((128, 128), Image.ANTIALIAS)
     icon = PIL.ImageTk.PhotoImage(im)
     return icon
-
 
 
 if __name__ == "__main__":
