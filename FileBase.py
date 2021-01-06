@@ -1,12 +1,12 @@
-# Importing Important Libraries
 import sqlite3
 
+
 class Filebase:
-    '''
+    """
     Database Class for sqlite3
     :params conn — sqlite3Connection
     :params curr — cursor
-    '''
+    """
 
     def __init__(self):
         try:
