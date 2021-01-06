@@ -7,7 +7,7 @@ except:
 
 from RegisterPage import RegisterPage
 from LoginPage import LoginPage
-
+import BootstrapGrid
 
 
 from dbase import *
@@ -35,7 +35,7 @@ class MainWindow(tk.Tk):
         if self._frame is not None:
             self._frame.destroy()
         self._frame = new_frame
-        self._frame.pack()
+        self._frame.pack(expand=True, fil=tk.BOTH)
 
 
 class StartPage(tk.Frame):

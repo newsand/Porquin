@@ -1,20 +1,16 @@
 # greetings to https://www.delftstack.com/howto/python-tkinter/how-to-switch-frames-in-tkinter/
-from io import BytesIO
-
-
-import PIL
-from PIL import Image
-from PIL.ImageTk import PhotoImage
-
-
-
-import MainWindow as MW
 try:
     import Tkinter as tk
 except:
     import tkinter as tk
-from tkinter import Label,  FLAT,  Menu
+from tkinter import Label, FLAT, Menu, BOTH
+from io import BytesIO
+import PIL
+from PIL import Image
+from PIL.ImageTk import PhotoImage
 
+import MainWindow as MW
+import BootstrapGrid
 
 
 from dbase import *
@@ -69,6 +65,7 @@ class AppViewPage(tk.Frame):
         tk.Frame.__init__(self, master)
         tk.Frame.configure(self, bg=BGC)
         self.master.resizable(1, 1)
+
         self.men_bar()
 
         # headers
@@ -76,25 +73,16 @@ class AppViewPage(tk.Frame):
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
         hello_label.pack()
 
-        # create the real Frame for images
-        image_list_frame = tk.Frame(self, height=100, width=100, bg=BGC, borderwidth=2)
-        image_list_frame.pack()
-        # Create WidgetWrapper
-        # state = "disabled" is to disable text from being input by user
-        # cursor = "arrow" is to ensure when user hovers, the arrow is displayed
-        widget_wrapper = tk.Text(image_list_frame, wrap="char", borderwidth=0, highlightthickness=0, state="disabled",
-                                 cursor="arrow", bg=BGC)
-        widget_wrapper.pack(fill="both", expand=True)
 
-        # fill with images
+        frame = BootstrapGrid.AutoGrid(self,bg=BGC)
+        frame.pack(expand=True, fil=BOTH)
         files_array = files.search_files_from_user((2,))
+        #
         for iteration, x in enumerate(files_array):
-            icon = generate_thumbnail(x[3])
-            sound_btn = tk.Button(image_list_frame, image=icon, padx=20, relief= FLAT,
-                                  command=lambda lan=x: stream_toImage(lan[3]).show())
-            sound_btn.image = icon
-            self.additem(widget_wrapper, sound_btn)
+            BootstrapGrid.ImageCard(frame).add_button(x).add_file_name(x[2]).grid()
             print(iteration)
+
+
 
 
 def stream_toImage(stream) -> Image:
