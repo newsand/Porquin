@@ -21,8 +21,6 @@ files.createTable()
 BGC = "#123456"
 
 
-
-
 class LoginPage(tk.Frame):
     def login(self):
         self.master.switch_frame(AppViewPage).pack()
