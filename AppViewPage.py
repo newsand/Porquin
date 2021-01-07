@@ -1,4 +1,6 @@
 # greetings to https://www.delftstack.com/howto/python-tkinter/how-to-switch-frames-in-tkinter/
+#from t3 import ScrollableFrame, ImageCard
+
 try:
     import Tkinter as tk
 except:
@@ -65,6 +67,7 @@ class AppViewPage(tk.Frame):
         tk.Frame.__init__(self, master)
         tk.Frame.configure(self, bg=BGC)
         self.master.resizable(1, 1)
+        self.master.minsize(height=300, width=350)
 
         self.men_bar()
 
@@ -73,15 +76,14 @@ class AppViewPage(tk.Frame):
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
         hello_label.pack()
 
-
-        frame = BootstrapGrid.AutoGrid(self,bg=BGC)
-        frame.pack(expand=True, fil=BOTH)
+        frame = BootstrapGrid.ScrollableFrame(self)
         files_array = files.search_files_from_user((2,))
-        #
+
         for iteration, x in enumerate(files_array):
-            BootstrapGrid.ImageCard(frame).add_button(x).add_file_name(x[2]).grid()
+            BootstrapGrid.ImageCard(frame.scrollable_frame).add_button(x).add_file_name(x[2]).grid()
             print(iteration)
 
+        frame.pack(side="left", fill=tk.BOTH, expand=True)
 
 
 

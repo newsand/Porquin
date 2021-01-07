@@ -1,3 +1,5 @@
+
+from tkinter import ttk
 try:
     import Tkinter as tk
 except:
@@ -9,17 +11,41 @@ import PIL
 from PIL import Image
 from PIL.ImageTk import PhotoImage
 
+BGC = "#123456"
 
-class AutoGrid(tk.Frame):
-    def __init__(self, master=None, **kwargs):
-        tk.Frame.__init__(self, master, **kwargs)
-        self.columns = None
+
+
+class ScrollableFrame(ttk.Frame):
+    def __init__(self, container, *args, **kwargs):
+        super().__init__(container, *args, **kwargs)
+        canvas = tk.Canvas(self,bg=BGC)
+        scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
+
+        s = ttk.Style()
+        s.configure('BGC.TFrame', background=BGC)
+        self.scrollable_frame = ttk.Frame(canvas, style='BGC.TFrame')
+        self.columns=0
+
+        self.scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
         self.bind('<Configure>', self.regrid)
+
+        canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
 
     def regrid(self, event=None):
         grid_width = self.winfo_width()
-        slaves = self.grid_slaves()
-        slaves_width = max(slave.winfo_width() for slave in slaves)
+        slaves = self.scrollable_frame.grid_slaves()
+        slaves_width = slaves[1].winfo_width()
         cols = grid_width // slaves_width
         if (cols == self.columns) | (cols == 0):  # if the column number has not changed, abort
             return
@@ -27,7 +53,6 @@ class AutoGrid(tk.Frame):
             slave.grid_forget()
             slave.grid(row=i // cols, column=i % cols)
         self.columns = cols
-
 
 class ImageCard(tk.Frame):
     def __init__(self, master=None, **kwargs):
@@ -59,25 +84,3 @@ def generate_thumbnail(xablau) -> PhotoImage:
     im.thumbnail((128, 128), Image.ANTIALIAS)
     icon = PIL.ImageTk.PhotoImage(im)
     return icon
-
-
-# example of using autogrid
-# def main():
-#     root = tk.Tk()
-#     frame = AutoGrid(root)
-#     frame.pack(fill=tk.BOTH, expand=True)
-#     files_array = files.search_files_from_user((2,))
-#     #
-#
-#     ImageCard(frame).add_button(files_array[0]).add_file_name(files_array[0][2]).grid()
-#     ImageCard(frame).add_button(files_array[1]).add_file_name(files_array[1][2]).grid()
-#     ImageCard(frame).add_button(files_array[2]).add_file_name(files_array[2][2]).grid()
-#     ImageCard(frame).add_button(files_array[3]).add_file_name(files_array[3][2]).grid()
-#     print(files_array[3][2])
-#
-#     root.mainloop()
-
-
-# example of using autogrid main
-#if __name__ == '__main__':
-#    main()
