@@ -1,9 +1,9 @@
 # greetings to https://www.delftstack.com/howto/python-tkinter/how-to-switch-frames-in-tkinter/
 #from t3 import ScrollableFrame, ImageCard
-
+from struct import pack
 from Crypto import Random
 from Crypto.Cipher import Blowfish
-from struct import pack
+from TopMenu import TopMenu
 try:
     import Tkinter as tk
 except:
@@ -72,9 +72,8 @@ class AppViewPage(tk.Frame):
         tk.Frame.configure(self, bg=BGC)
         self.master.resizable(1, 1)
         self.master.minsize(height=300, width=350)
-
-        self.men_bar()
-
+        self.menubar = TopMenu(self.master)
+        self.menubar.edit
         # headers
         tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
@@ -86,12 +85,10 @@ class AppViewPage(tk.Frame):
         for iteration, x in enumerate(files_array):
             print(type(x))
             y=(x[0],x[1],x[2],decrypt_image(x[3]))
-            #print (x)
             BootstrapGrid.ImageCard(frame.scrollable_frame).add_button(y).add_file_name(x[2]).grid()
             print(iteration)
 
         frame.pack(side="left", fill=tk.BOTH, expand=True)
-
 
 
 def stream_toImage(stream) -> Image:
