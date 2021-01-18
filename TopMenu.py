@@ -7,9 +7,6 @@ from io import BytesIO
 from struct import pack
 from Crypto import Random
 from Crypto.Cipher import Blowfish
-
-
-
 from dbase import *
 from FileBase import *
 db = Database()
@@ -25,26 +22,26 @@ class TopMenu(tk.Menu):
         tk.Menu.__init__(self, master, tearoff=False)
         self.controller = master
         
-        vault = tk.Menu(self, tearoff=0)
-        vault.add_command(label="Save file to vault", command=save_to_vault)
-        vault.add_separator()
-        vault.add_command(label="Close Session", command=lambda: self.master.switch_frame(MW.StartPage))
-        vault.add_command(label="Exit", command=self.master.quit)
-        self.add_cascade(label="Vault", menu=vault)
+        self.vault = tk.Menu(self, tearoff=0)
+        self.vault.add_command(label="Save file to vault", command=save_to_vault)
+        self.vault.add_separator()
+        self.vault.add_command(label="Close Session", command=lambda: self.master.switch_frame(MW.StartPage))
+        self.vault.add_command(label="Exit", command=self.master.quit)
+        self.add_cascade(label="Vault", menu=self.vault)
 
-        edit = tk.Menu(self, tearoff=0)
-        edit.add_command(label="Undo")
-        edit.add_separator()
-        edit.add_command(label="Cut")
-        edit.add_command(label="Copy")
-        edit.add_command(label="Paste")
-        edit.add_command(label="Delete")
-        edit.add_command(label="Select All")
-        self.add_cascade(label="Edit", menu=edit)
+        self.edit = tk.Menu(self, tearoff=0)
+        self.edit.add_command(label="Undo")
+        self.edit.add_separator()
+        self.edit.add_command(label="Cut")
+        self.edit.add_command(label="Copy")
+        self.edit.add_command(label="Paste")
+        self.edit.add_command(label="Delete")
+        self.edit.add_command(label="Select All")
+        self.add_cascade(label="Edit", menu=self.edit)
 
-        help_menu = Menu(self, tearoff=0)
-        help_menu.add_command(label="About",command=about)
-        self.add_cascade(label="Help", menu=help_menu)
+        self.help_menu = Menu(self, tearoff=0)
+        self.help_menu.add_command(label="About",command=about)
+        self.add_cascade(label="Help", menu=self.help_menu)
 
         self.master.config(menu=self)
 
