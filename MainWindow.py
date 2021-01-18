@@ -7,8 +7,6 @@ except:
 
 from RegisterPage import RegisterPage
 from LoginPage import LoginPage
-import BootstrapGrid
-
 
 from dbase import *
 from FileBase import *
@@ -24,12 +22,13 @@ BGC = "#123456"
 class MainWindow(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
-        self.title('porkit')
+        self.title('Porquin')
         self.resizable(0, 0)
         self.config(bg=BGC)
         self._frame = None
         self.switch_frame(StartPage)
 
+    # navigation system
     def switch_frame(self, frame_class):
         new_frame = frame_class(self)
         if self._frame is not None:
