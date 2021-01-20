@@ -3,6 +3,8 @@
 from struct import pack
 from Crypto import Random
 from Crypto.Cipher import Blowfish
+
+from Configleton import Configleton
 from TopMenu import TopMenu
 try:
     import Tkinter as tk
@@ -18,9 +20,9 @@ import MainWindow as MW
 import BootstrapGrid
 
 
-from dbase import *
+from User import *
 from FileBase import *
-db = Database()
+db = User()
 db.createTable()
 
 files = Filebase()
@@ -74,19 +76,21 @@ class AppViewPage(tk.Frame):
         self.master.minsize(height=300, width=350)
         self.menubar = TopMenu(self.master)
         self.menubar.edit
+
+        print(Configleton._USER)
         # headers
         tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
         hello_label.pack()
 
         frame = BootstrapGrid.ScrollableFrame(self)
-        files_array = files.search_files_from_user((2,))
+        files_array = files.search_files_from_user(Configleton._USER)
 
         for iteration, x in enumerate(files_array):
-            print(type(x))
+            #print(type(x))
             y=(x[0],x[1],x[2],decrypt_image(x[3]))
             BootstrapGrid.ImageCard(frame.scrollable_frame).add_button(y).add_file_name(x[2]).grid()
-            print(iteration)
+            #print(iteration)
 
         frame.pack(side="left", fill=tk.BOTH, expand=True)
 
@@ -127,11 +131,11 @@ def onOpen():
     # print(rfile)
     tocrip = rfile.read()
     # print(tocrip)
-    print(type(tocrip))
+    #print(type(tocrip))
     rfile.close()
 
     keyz = 'senhasatanica'.encode("utf-8")
-    print(type(keyz))
+    #print(type(keyz))
     cripted_file = encrypt(keyz, tocrip)
     save_file(cripted_file,file.split('/')[-1])
 
