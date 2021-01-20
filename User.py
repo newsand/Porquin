@@ -3,24 +3,25 @@ import sqlite3
 import bcrypt
 
 
-class Database:
+class User:
     '''
-    Database Class for sqlite3
+    User Class for sqlite3
     :params conn — sqlite3Connection
     :params curr — cursor
     '''
 
     def __init__(self):
         try:
+
             self.conn = sqlite3.connect("test.db")
-            print("Successfully Opened Database")
+            print("Successfully Opened User")
             self.curr = self.conn.cursor()
         except:
             print("Failed")
 
     def createTable(self):
         '''
-        Method for Creating Table in Database
+        Method for Creating Table in User
         '''
         create_table = '''
         CREATE TABLE IF NOT EXISTS cred(
@@ -34,7 +35,7 @@ class Database:
 
     def insertData(self, data):
         '''
-        Method for Insertig Data in Table in Database
+        Method for Insertig Data in Table in User
         '''
         insert_data = """
         INSERT INTO cred(username, password)
@@ -45,7 +46,7 @@ class Database:
 
     def searchData(self, data):
         '''
-        Method for Searching Data in Table in Database
+        Method for Searching Data in Table in User
         '''
         search_data = '''
         SELECT * FROM cred WHERE username = (?);
@@ -58,7 +59,7 @@ class Database:
 
     def validateData(self, data, inputData):
         '''
-        Method for Validating Data Table in Database
+        Method for Validating Data Table in User
         '''
 
         print(data)
@@ -70,3 +71,21 @@ class Database:
         row = self.curr.fetchall()
         if row[0][1] == inputData[0]:
             return row[0][2] == bcrypt.hashpw(inputData[1].encode(), row[0][2])
+
+    def get_id(self, user_name):
+        query = """
+        SELECT id FROM cred WHERE username = (?);
+        """
+        self.curr.execute(query, user_name)
+        row = self.curr.fetchall()
+
+        return row[0]
+
+
+
+    def finish(self):
+        try:
+            self.conn.close()
+            print("Successfully CLosed ")
+        except:
+            print("not closed")

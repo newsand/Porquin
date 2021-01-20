@@ -3,7 +3,7 @@ import sqlite3
 
 class Filebase:
     """
-    Database Class for sqlite3
+    File storage Class for sqlite3
     :params conn — sqlite3Connection
     :params curr — cursor
     """
@@ -11,14 +11,14 @@ class Filebase:
     def __init__(self):
         try:
             self.conn = sqlite3.connect("test.db")
-            print("Successfully Opened Database")
+            print("Successfully Opened User")
             self.curr = self.conn.cursor()
         except:
             print("Failed")
 
     def createTable(self):
         '''
-        Method for Creating Table in Database
+        Method for Creating Table in User
         '''
         create_table = '''
         CREATE TABLE IF NOT EXISTS files    (
@@ -37,7 +37,7 @@ class Filebase:
 
     def insertFile(self, data):
         '''
-        Method for Insertig Data in Table in Database
+        Method for Insertig Data in Table in User
         '''
         insert_data = """
         INSERT INTO files(owner, filename, file)
@@ -48,25 +48,32 @@ class Filebase:
 
     def search_files_from_user(self, data):
         '''
-        Method for Searching Data in Table in Database
+        Method for Searching Data in Table in User
         '''
         search_data = '''
         SELECT * FROM files WHERE owner = (?);
         '''
-        print(data)
+        # print(data)
         self.curr.execute(search_data, data)
         rows = self.curr.fetchall()
         return rows
 
     def search_file(self, data):
         '''
-        Method for Searching Data in Table in Database
+        Method for Searching Data in Table in User
         '''
         search_data = '''
         SELECT * FROM files WHERE owner = (?) and id  = (?);
         '''
-        print(data)
+        #print(data)
         print(search_data)
         self.curr.execute(search_data, data)
         rows = self.curr.fetchall()
         return rows
+
+    def finish(self):
+        try:
+            self.conn.close()
+            print("Successfully CLosed ")
+        except:
+            print("not closed")
