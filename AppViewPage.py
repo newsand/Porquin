@@ -75,16 +75,15 @@ class AppViewPage(tk.Frame):
         self.master.resizable(1, 1)
         self.master.minsize(height=300, width=350)
         self.menubar = TopMenu(self.master)
-        self.menubar.edit
+        # self.menubar.edit
 
-        print(Configleton._USER)
         # headers
         tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
         hello_label.pack()
 
         frame = BootstrapGrid.ScrollableFrame(self)
-        files_array = files.search_files_from_user(Configleton._USER)
+        files_array = files.search_files_from_user(Configleton.USER)
 
         for iteration, x in enumerate(files_array):
             #print(type(x))
@@ -168,7 +167,7 @@ def decrypt(key, file):
     return msg
 
 def decrypt_image(file):
-    keyz = 'senhasatanica'.encode("utf-8")
+    keyz = Configleton.get_cryptokey().encode("utf-8")
     cripted_file = decrypt(keyz, file)
     stream = BytesIO(cripted_file).read()
     #image = Image.open(stream).convert("RGBA")
