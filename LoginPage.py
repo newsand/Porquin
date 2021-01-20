@@ -1,24 +1,15 @@
 # greetings to https://www.delftstack.com/howto/python-tkinter/how-to-switch-frames-in-tkinter/
-
-
 try:
     import Tkinter as tk
 
 except:
     import tkinter as tk
-
-from tkinter import Label, messagebox, Entry, Button
+import Configleton
 from MainWindow import *
+from User import User
+from tkinter import Label, messagebox, Entry, Button
 from AppViewPage import AppViewPage
-from dbase import *
-from FileBase import *
-db = Database()
-db.createTable()
-
-files = Filebase()
-files.createTable()
-
-BGC = "#123456"
+BGC = Configleton.shared_instance().get_required_config_var("BGC")
 
 
 class LoginPage(tk.Frame):
@@ -28,7 +19,6 @@ class LoginPage(tk.Frame):
     def __init__(self, master):
         self.usernameS = tk.StringVar()
         self.passwordS = tk.StringVar()
-
         tk.Frame.__init__(self, master)
         tk.Frame.configure(self, bg=BGC)
         tk.Label(self, text="Login", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
@@ -43,19 +33,26 @@ class LoginPage(tk.Frame):
         pass_entry.pack()
         login_button = Button(self, text="Login", command=self.validate)
         login_button.pack()
+        print(Configleton.shared_instance().get_cryptokey())
 
     def validate(self):
         username = self.usernameS.get()
         password = self.passwordS.get()
         data = (username,)
-        print(data)
+        #print(1)
+        #print(data)
         inputData = (username, password,)
-        print(inputData)
+        #print(2)
+        #print(inputData)
+
+        user_table = User()
         try:
-            if (db.validateData(data, inputData)):
+            if user_table.validateData(data, inputData):
+                Configleton._USER = user_table.get_id(data)
                 messagebox.showinfo("Successful", "Login Was Successful")
                 self.login()
             else:
                 messagebox.showerror("Error", "Wrong Credentials")
         except IndexError:
             messagebox.showerror("Error", "Wrong Credentials")
+        user_table.finish()

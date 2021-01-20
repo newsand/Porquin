@@ -2,18 +2,15 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
-import MainWindow as MW
+
+from Configleton import Configleton
+import MainWindow as Mw
 from io import BytesIO
 from struct import pack
 from Crypto import Random
 from Crypto.Cipher import Blowfish
-from dbase import *
+from User import *
 from FileBase import *
-db = Database()
-db.createTable()
-
-files = Filebase()
-files.createTable()
 
 
 class TopMenu(tk.Menu):
@@ -21,11 +18,12 @@ class TopMenu(tk.Menu):
     def __init__(self, master):
         tk.Menu.__init__(self, master, tearoff=False)
         self.controller = master
-        
+
         self.vault = tk.Menu(self, tearoff=0)
         self.vault.add_command(label="Save file to vault", command=save_to_vault)
+        self.vault.add_command(label="Save file to vault_test", command=save_to_vault_test)
         self.vault.add_separator()
-        self.vault.add_command(label="Close Session", command=lambda: self.master.switch_frame(MW.StartPage))
+        self.vault.add_command(label="Close Session", command=lambda: self.master.switch_frame(Mw.StartPage))
         self.vault.add_command(label="Exit", command=self.master.quit)
         self.add_cascade(label="Vault", menu=self.vault)
 
@@ -40,7 +38,7 @@ class TopMenu(tk.Menu):
         self.add_cascade(label="Edit", menu=self.edit)
 
         self.help_menu = Menu(self, tearoff=0)
-        self.help_menu.add_command(label="About",command=about)
+        self.help_menu.add_command(label="About", command=about)
         self.add_cascade(label="Help", menu=self.help_menu)
 
         self.master.config(menu=self)
@@ -48,18 +46,42 @@ class TopMenu(tk.Menu):
 
 def save_file(file: bytes, filename: str):
     tosave = BytesIO(file).read()
-    data = (2, filename, tosave)
+    data = (Configleton._USER[0], filename, tosave)
+    print(data)
+    files = Filebase()
     files.insertFile(data)
+    files.finish()
+
 
 def save_to_vault():
     file = filedialog.askopenfilename(title="open")
     rfile = open(file, 'rb')
     tocrip = rfile.read()
     rfile.close()
-    keyz = 'senhasatanica'.encode("utf-8")
-    print(type(keyz))
+    # keyz = 'senhasatanica'.encode("utf-8")
+    keyz = Configleton.shared_instance().get_cryptokey().encode("utf-8")
+    # print(type(keyz))
     cripted_file = encrypt(keyz, tocrip)
     save_file(cripted_file, file.split('/')[-1])
+
+
+def save_file_test(file: bytes, filename: str):
+    tosave = BytesIO(file).read()
+    data = (2, filename, tosave)
+    files = Filebase()
+    files.insertFile(data)
+    files.finish()
+
+def save_to_vault_test():
+    file = filedialog.askopenfilename(title="open")
+    rfile = open(file, 'rb')
+    tocrip = rfile.read()
+    rfile.close()
+    # keyz = 'senhasatanica'.encode("utf-8")
+    keyz = Configleton.shared_instance().get_cryptokey().encode("utf-8")
+    # print(type(keyz))
+    cripted_file = encrypt(keyz, tocrip)
+    save_file_test(cripted_file, file.split('/')[-1])
 
 def encrypt(key: bytes, file: bytes):
     bs = Blowfish.block_size
@@ -70,10 +92,11 @@ def encrypt(key: bytes, file: bytes):
     padding = [plen] * plen
     padding = pack('b' * plen, *padding)
     text = cipher.IV + cipher.encrypt(plaintext + padding)
-    return (text)
+    return text
+
 
 def about():
-    aboutmsg ='This is the Porquin File Vault\
+    aboutmsg = 'This is the Porquin File Vault\
               \n\nVersion: 0.1a\
               \n\nProposed and developed by Filipe Caporali\
               \n\nPorquin is made for safely stashing your files that you want to keep private!\
