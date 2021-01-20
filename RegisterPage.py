@@ -5,13 +5,7 @@ except:
 
 from tkinter import Label, messagebox, Entry, Button
 from MainWindow import *
-from dbase import *
-from FileBase import *
-db = Database()
-db.createTable()
-
-files = Filebase()
-files.createTable()
+from User import *
 
 BGC = "#123456"
 
@@ -56,12 +50,13 @@ class RegisterPage(tk.Frame):
         print(data)
         print(password)
         print(confpassword)
-
-        result = db.searchData(data)
+        user_table = User()
+        result = user_table.searchData(data)
         print(result)
         if result != 0:
             data = (username, self.hashed)
-            db.insertData(data)
+            user_table.insertData(data)
             messagebox.showinfo("Successful", "Username Was Added")
         else:
             messagebox.showwarning("Warning", "Username already Exists")
+        user_table.finish()
