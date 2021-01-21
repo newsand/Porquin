@@ -1,11 +1,10 @@
 # greetings to https://www.delftstack.com/howto/python-tkinter/how-to-switch-frames-in-tkinter/
-from Configleton import Configleton
 try:
     import Tkinter as tk
 except:
-    import tkinter as tk
-from RegisterPage import RegisterPage
-from LoginPage import LoginPage
+    import tkinter as tks
+from Configleton import Configleton
+from StartPage import StartPage
 BGC = Configleton.shared_instance().get_required_config_var("BGC")
 
 
@@ -26,11 +25,3 @@ class MainWindow(tk.Tk):
         self._frame = new_frame
         self._frame.pack(expand=True, fil=tk.BOTH)
 
-
-class StartPage(tk.Frame):
-    def __init__(self, master):
-        tk.Frame.__init__(self, master)
-        self.configure(bg=BGC)
-        tk.Label(self, text="FileVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
-        tk.Button(self, text="Login", command=lambda: master.switch_frame(LoginPage)).pack()
-        tk.Button(self, text="Register", command=lambda: master.switch_frame(RegisterPage)).pack()

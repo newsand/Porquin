@@ -1,11 +1,11 @@
 # greetings to https://www.delftstack.com/howto/python-tkinter/how-to-switch-frames-in-tkinter/
-#from t3 import ScrollableFrame, ImageCard
+# from t3 import ScrollableFrame, ImageCard
 from struct import pack
 from Crypto import Random
 from Crypto.Cipher import Blowfish
-
 from Configleton import Configleton
 from TopMenu import TopMenu
+
 try:
     import Tkinter as tk
 except:
@@ -19,9 +19,9 @@ from PIL.ImageTk import PhotoImage
 import MainWindow as MW
 import BootstrapGrid
 
-
 from User import *
 from FileBase import *
+
 db = User()
 db.createTable()
 
@@ -32,7 +32,6 @@ BGC = "#123456"
 
 
 class AppViewPage(tk.Frame):
-
 
     def men_bar(self):
         menubar = Menu(self)
@@ -80,16 +79,17 @@ class AppViewPage(tk.Frame):
         # headers
         tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
+        pass_entry = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
         hello_label.pack()
 
         frame = BootstrapGrid.ScrollableFrame(self)
-        files_array = files.search_files_from_user(Configleton.USER)
+        files_array = files.search_files_from_user(Configleton.shared_instance()._USER)
 
         for iteration, x in enumerate(files_array):
-            #print(type(x))
-            y=(x[0],x[1],x[2],decrypt_image(x[3]))
+            # print(type(x))
+            y = (x[0], x[1], x[2], decrypt_image(x[3]))
             BootstrapGrid.ImageCard(frame.scrollable_frame).add_button(y).add_file_name(x[2]).grid()
-            #print(iteration)
+            # print(iteration)
 
         frame.pack(side="left", fill=tk.BOTH, expand=True)
 
@@ -108,21 +108,21 @@ def generate_thumbnail(xablau) -> PhotoImage:
     return icon
 
 
-
-def save_image(file_path:str):
-    image =PIL.Image.open("luigi.jpg")
+def save_image(file_path: str):
+    image = PIL.Image.open("luigi.jpg")
     tosave = BytesIO()
     image.save(tosave, format='PNG')
     tosave = tosave.getvalue()
-    data = (2,image.filename, tosave)
+    data = (2, image.filename, tosave)
     files.insertData(data)
 
-def save_file(file:bytes,filename:str):
-    tosave = BytesIO(file).read()
-    data = (2,filename, tosave)
-#    print(data)
 
+def save_file(file: bytes, filename: str):
+    tosave = BytesIO(file).read()
+    data = (2, filename, tosave)
+    #    print(data)
     files.insertFile(data)
+
 
 def onOpen():
     file = filedialog.askopenfilename(title="open")
@@ -130,13 +130,13 @@ def onOpen():
     # print(rfile)
     tocrip = rfile.read()
     # print(tocrip)
-    #print(type(tocrip))
+    # print(type(tocrip))
     rfile.close()
 
     keyz = 'senhasatanica'.encode("utf-8")
-    #print(type(keyz))
+    # print(type(keyz))
     cripted_file = encrypt(keyz, tocrip)
-    save_file(cripted_file,file.split('/')[-1])
+    save_file(cripted_file, file.split('/')[-1])
 
 
 def encrypt(key: bytes, file: bytes):
@@ -149,6 +149,7 @@ def encrypt(key: bytes, file: bytes):
     padding = pack('b' * plen, *padding)
     text = cipher.IV + cipher.encrypt(plaintext + padding)
     return (text)
+
 
 def decrypt(key, file):
     bs = Blowfish.block_size
@@ -163,12 +164,13 @@ def decrypt(key, file):
     last_byte = msg[-1]
     msg = msg[:- (last_byte if type(last_byte) is int else ord(last_byte))]
 
-    #return msg.decode('utf-8')
+    # return msg.decode('utf-8')
     return msg
 
+
 def decrypt_image(file):
-    keyz = Configleton.get_cryptokey().encode("utf-8")
+    keyz = Configleton.shared_instance().get_cryptokey().encode("utf-8")
     cripted_file = decrypt(keyz, file)
     stream = BytesIO(cripted_file).read()
-    #image = Image.open(stream).convert("RGBA")
+    # image = Image.open(stream).convert("RGBA")
     return stream

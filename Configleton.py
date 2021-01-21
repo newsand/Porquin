@@ -52,10 +52,6 @@ class Configleton:
             raise Exception(f"Please set the {'CRYPT_KEY'} environment variable")
         return os.environ['CRYPT_KEY']
 
-    @property
-    def USER(self):
-        return self._USER
-
 
 def get_required_env_var(envvar: str) -> str:
     if envvar not in os.environ:
