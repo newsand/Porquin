@@ -14,7 +14,6 @@ from PIL.ImageTk import PhotoImage
 BGC = "#123456"
 
 
-
 class ScrollableFrame(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
@@ -51,6 +50,7 @@ class ScrollableFrame(ttk.Frame):
             slave.grid(row=i // cols, column=i % cols)
         self.columns = cols
 
+
 class ImageCard(tk.Frame):
     def __init__(self, master=None, **kwargs):
         tk.Frame.__init__(self, master, bd=5, relief=tk.RAISED, **kwargs)
@@ -66,7 +66,6 @@ class ImageCard(tk.Frame):
     def add_file_name(self, filename):
         tk.Label(self, text=filename).pack(pady=10)
         return self
-
 
 
 def stream_toImage(stream) -> Image:

@@ -9,7 +9,6 @@ from io import BytesIO
 from struct import pack
 from Crypto import Random
 from Crypto.Cipher import Blowfish
-from User import *
 from FileBase import *
 
 
@@ -46,7 +45,7 @@ class TopMenu(tk.Menu):
 
 def save_file(file: bytes, filename: str):
     tosave = BytesIO(file).read()
-    data = (Configleton._USER[0], filename, tosave)
+    data = (Configleton.shared_instance()._USER[0], filename, tosave)
     print(data)
     files = Filebase()
     files.insertFile(data)

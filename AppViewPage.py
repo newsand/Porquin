@@ -80,18 +80,25 @@ class AppViewPage(tk.Frame):
         tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
         pass_entry = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
+        tk.Button(self, text="update", command=self.forget).pack()
+        tk.Button(self, text="restore", command=self.restore).pack()
         hello_label.pack()
 
-        frame = BootstrapGrid.ScrollableFrame(self)
+        self.frame = BootstrapGrid.ScrollableFrame(self)
+        self.frame = self.restore()
+
+    def restore(self):
+        self.frame.destroy()
+        self.frame = BootstrapGrid.ScrollableFrame(self)
         files_array = files.search_files_from_user(Configleton.shared_instance()._USER)
 
         for iteration, x in enumerate(files_array):
             # print(type(x))
             y = (x[0], x[1], x[2], decrypt_image(x[3]))
-            BootstrapGrid.ImageCard(frame.scrollable_frame).add_button(y).add_file_name(x[2]).grid()
+            BootstrapGrid.ImageCard(self.frame.scrollable_frame).add_button(y).add_file_name(x[2]).grid()
             # print(iteration)
-
-        frame.pack(side="left", fill=tk.BOTH, expand=True)
+            self.frame.pack(side="left", fill=tk.BOTH, expand=True)
+        return self.frame
 
 
 def stream_toImage(stream) -> Image:
@@ -127,14 +134,9 @@ def save_file(file: bytes, filename: str):
 def onOpen():
     file = filedialog.askopenfilename(title="open")
     rfile = open(file, 'rb')
-    # print(rfile)
     tocrip = rfile.read()
-    # print(tocrip)
-    # print(type(tocrip))
     rfile.close()
-
     keyz = 'senhasatanica'.encode("utf-8")
-    # print(type(keyz))
     cripted_file = encrypt(keyz, tocrip)
     save_file(cripted_file, file.split('/')[-1])
 

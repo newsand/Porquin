@@ -53,7 +53,7 @@ class Filebase:
         search_data = '''
         SELECT * FROM files WHERE owner = (?);
         '''
-        print(data)
+        #print(data)
         self.curr.execute(search_data, data)
         rows = self.curr.fetchall()
         return rows

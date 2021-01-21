@@ -2,7 +2,7 @@
 try:
     import Tkinter as tk
 except:
-    import tkinter as tks
+    import tkinter as tk
 from Configleton import Configleton
 from StartPage import StartPage
 BGC = Configleton.shared_instance().get_required_config_var("BGC")
