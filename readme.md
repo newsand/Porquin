@@ -22,4 +22,4 @@ This is a very simple idea.
 
 ## Perspective
 * Currently there is no way to delete a file  in the project... to do so you must access the porquin_file which the default path is in the config.conf file using SQL.  but don't worry..its in progress.
-* 
+* Soon i'll make available some MSI/DEB so anyone can use without the boring part of compiling projects
