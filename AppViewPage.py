@@ -33,40 +33,6 @@ BGC = "#123456"
 
 class AppViewPage(tk.Frame):
 
-    def men_bar(self):
-        menubar = Menu(self)
-        file = Menu(menubar, tearoff=0)
-        file.add_command(label="New")
-        file.add_command(label="Save file to vault", command=onOpen)
-        file.add_command(label="Save")
-        file.add_command(label="Save as...")
-
-        file.add_separator()
-        file.add_command(label="Close Session", command=lambda: self.master.switch_frame(MW.StartPage))
-        file.add_command(label="Exit", command=self.master.quit)
-
-        menubar.add_cascade(label="File", menu=file)
-        edit = Menu(menubar, tearoff=0)
-        edit.add_command(label="Undo")
-
-        edit.add_separator()
-
-        edit.add_command(label="Cut")
-        edit.add_command(label="Copy")
-        edit.add_command(label="Paste")
-        edit.add_command(label="Delete")
-        edit.add_command(label="Select All")
-
-        menubar.add_cascade(label="Edit", menu=edit)
-        help_menu = Menu(menubar, tearoff=0)
-        help_menu.add_command(label="About")
-        menubar.add_cascade(label="Help", menu=help_menu)
-        self.master.config(menu=menubar)
-        return
-
-    def additem(self, widgetWrapper, item):
-        widgetWrapper.window_create("end", window=item)  # Put it inside the widget wrapper (the text)
-
     def __init__(self, master):
         # configure frame
         tk.Frame.__init__(self, master)
@@ -74,18 +40,23 @@ class AppViewPage(tk.Frame):
         self.master.resizable(1, 1)
         self.master.minsize(height=300, width=350)
         self.menubar = TopMenu(self.master)
-        # self.menubar.edit
+        self.menubar.vault.add_command(label="Save file to vault", command=self.save)
 
         # headers
         tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
-        pass_entry = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
-        tk.Button(self, text="update", command=self.forget).pack()
-        tk.Button(self, text="restore", command=self.restore).pack()
+        # pass_entry = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white").pack()
+        #tk.Button(self, text="update", command=self.forget).pack()
+        #tk.Button(self, text="restore", command=self.restore).pack()
         hello_label.pack()
 
         self.frame = BootstrapGrid.ScrollableFrame(self)
         self.frame = self.restore()
+
+
+    def save(self):
+        self.menubar.save_to_vault()
+        self.restore()
 
     def restore(self):
         self.frame.destroy()
