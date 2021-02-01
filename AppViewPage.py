@@ -41,18 +41,10 @@ class AppViewPage(tk.Frame):
         self.master.minsize(height=300, width=350)
         self.menubar = TopMenu(self.master)
         self.menubar.vault.add_command(label="Save file to vault", command=self.save)
-
         # headers
-        tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
-        hello_label = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white")
-        # pass_entry = Label(self, text="HELOOO MODAFOKA", bg=BGC, fg="white").pack()
-        #tk.Button(self, text="update", command=self.forget).pack()
-        #tk.Button(self, text="restore", command=self.restore).pack()
-        hello_label.pack()
-
+        tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold"), bg=BGC, fg="white").pack(side="top", fill="x", pady=5)
         self.frame = BootstrapGrid.ScrollableFrame(self)
         self.frame = self.restore()
-
 
     def save(self):
         self.menubar.save_to_vault()
@@ -64,15 +56,13 @@ class AppViewPage(tk.Frame):
         files_array = files.search_files_from_user(Configleton.shared_instance()._USER)
 
         for iteration, x in enumerate(files_array):
-            # print(type(x))
             y = (x[0], x[1], x[2], decrypt_image(x[3]))
             BootstrapGrid.ImageCard(self.frame.scrollable_frame).add_button(y).add_file_name(x[2]).grid()
-            # print(iteration)
             self.frame.pack(side="left", fill=tk.BOTH, expand=True)
         return self.frame
 
 
-def stream_toImage(stream) -> Image:
+def stream_to_image(stream) -> Image:
     stream = BytesIO(stream)
     im = Image.open(stream).convert("RGBA")
     stream.close()
@@ -80,7 +70,7 @@ def stream_toImage(stream) -> Image:
 
 
 def generate_thumbnail(xablau) -> PhotoImage:
-    im = stream_toImage(xablau)
+    im = stream_to_image(xablau)
     im.thumbnail((128, 128), Image.ANTIALIAS)
     icon = PIL.ImageTk.PhotoImage(im)
     return icon
