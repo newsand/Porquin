@@ -9,9 +9,7 @@ from User import User
 import StartPage
 from AppViewPage import AppViewPage
 from tkinter import Label, messagebox, Entry, Button
-
 BGC = Configleton.shared_instance().get_required_config_var("BGC")
-
 
 class LoginPage(tk.Frame):
     def login(self):
@@ -22,7 +20,7 @@ class LoginPage(tk.Frame):
         self.passwordS = tk.StringVar()
         tk.Frame.__init__(self, master)
         tk.Frame.configure(self, bg=BGC)
-        tk.Label(self, text="Login", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
+        tk.Label(self, text="Login", bg=BGC, fg='white',font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
         tk.Button(self, text="Go back to start page", command=lambda: master.switch_frame(StartPage.StartPage)).pack()
         user_label = Label(self, text="User", bg=BGC, fg="white")
         user_label.pack()
@@ -33,7 +31,7 @@ class LoginPage(tk.Frame):
         pass_entry = Entry(self, show="*", textvariable=self.passwordS)
         pass_entry.pack()
         login_button = Button(self, text="Login", command=self.validate)
-        login_button.pack()
+        login_button.pack(fill='x',pady=5)
         print(Configleton.shared_instance().get_cryptokey())
 
     def validate(self):
