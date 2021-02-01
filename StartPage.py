@@ -5,8 +5,9 @@ try:
     import Tkinter as tk
 except:
     import tkinter as tk
-
 BGC = Configleton.shared_instance().get_required_config_var("BGC")
+
+
 class StartPage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
