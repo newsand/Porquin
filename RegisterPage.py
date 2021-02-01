@@ -6,7 +6,7 @@ except:
 from tkinter import Label, messagebox, Entry, Button
 from MainWindow import *
 from User import *
-
+import StartPage
 BGC = "#123456"
 
 
@@ -23,7 +23,7 @@ class RegisterPage(tk.Frame):
         tk.Frame.__init__(self, master)
         tk.Frame.configure(self, bg=BGC)
         tk.Label(self, text="Register", font=('Helvetica', 18, "bold")).pack(side="top", fill="x", pady=5)
-        tk.Button(self, text="Go back to start page", command=lambda: master.switch_frame(StartPage)).pack()
+        tk.Button(self, text="Go back to start page", command=lambda: master.switch_frame(StartPage.StartPage)).pack()
         user_label = Label(self, text="User", bg=BGC, fg="white")
         user_label.pack()
         user_entry = Entry(self, textvariable=self.usernameS)
