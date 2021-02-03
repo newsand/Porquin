@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import filedialog
 
 from Configleton import Configleton
-import MainWindow as Mw
+from interface import MainWindow as Mw
 from io import BytesIO
 from struct import pack
 from Crypto import Random
@@ -39,17 +39,16 @@ class TopMenu(tk.Menu):
 
         self.master.config(menu=self)
 
-    def save_file(self,file: bytes, filename: str):
+    def save_file(self, file: bytes, filename: str):
         tosave = BytesIO(file).read()
         data = (Configleton.shared_instance()._USER[0], filename, tosave)
-        print(data)
         files = Filebase()
         files.insertFile(data)
         files.finish()
 
-
     def save_to_vault(self):
         file = filedialog.askopenfilename(title="open")
+        print(file)
         rfile = open(file, 'rb')
         tocrip = rfile.read()
         rfile.close()
@@ -57,8 +56,13 @@ class TopMenu(tk.Menu):
         cripted_file = self.encrypt(keyz, tocrip)
         self.save_file(cripted_file, file.split('/')[-1])
 
+    def delete(self, files: list):
 
-    def encrypt(self,key: bytes, file: bytes):
+        files = Filebase()
+        files.delete_files(files)
+        files.finish()
+
+    def encrypt(self, key: bytes, file: bytes):
         bs = Blowfish.block_size
         iv = Random.new().read(bs)
         cipher = Blowfish.new(key, Blowfish.MODE_CBC, iv)
@@ -68,7 +72,6 @@ class TopMenu(tk.Menu):
         padding = pack('b' * plen, *padding)
         text = cipher.IV + cipher.encrypt(plaintext + padding)
         return text
-
 
     def about(self):
         aboutmsg = 'This is the Porquin File Vault\
