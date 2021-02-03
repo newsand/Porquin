@@ -1,13 +1,15 @@
 # greetings to https://www.delftstack.com/howto/python-tkinter/how-to-switch-frames-in-tkinter/
 import time
+
+from interface import StartPage
+
 try:
     import Tkinter as tk
 except:
     import tkinter as tk
 from Configleton import Configleton
 from User import User
-import StartPage
-from AppViewPage import AppViewPage
+from interface.AppViewPage import AppViewPage
 from tkinter import Label, messagebox, Entry, Button
 BGC = Configleton.shared_instance().get_required_config_var("BGC")
 

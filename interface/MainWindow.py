@@ -4,7 +4,7 @@ try:
 except:
     import tkinter as tk
 from Configleton import Configleton
-from StartPage import StartPage
+from interface.StartPage import StartPage
 BGC = Configleton.shared_instance().get_required_config_var("BGC")
 
 

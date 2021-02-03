@@ -1,12 +1,15 @@
+from Configleton import Configleton
+from interface import StartPage
+
 try:
     import Tkinter as tk
 except:
     import tkinter as tk
 
 from tkinter import Label, messagebox, Entry, Button
-from MainWindow import *
+
 from User import *
-import StartPage
+
 BGC = Configleton.shared_instance().get_required_config_var("BGC")
 
 

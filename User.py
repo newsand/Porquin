@@ -61,9 +61,6 @@ class User:
         '''
         Method for Validating Data Table in User
         '''
-
-        print(data)
-        print(inputData)
         validate_data = """
         SELECT * FROM cred WHERE username = (?);
         """

@@ -1,4 +1,4 @@
-from MainWindow import MainWindow
+from interface.MainWindow import MainWindow
 from Configleton import Configleton
 from User import *
 from FileBase import *
