@@ -20,25 +20,25 @@ BGC = "#123456"
 class ScrollableFrame(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
-        canvas = tk.Canvas(self, bg=BGC)
-        scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
+        self.canvas = tk.Canvas(self, bg=BGC)
+        scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
 
         s = ttk.Style()
         s.configure('BGC.TFrame', background=BGC)
-        self.scrollable_frame = ttk.Frame(canvas, style='BGC.TFrame')
+        self.scrollable_frame = ttk.Frame(self.canvas, style='BGC.TFrame')
         self.columns = 0
-
+        self.selected_cards = list()
         self.scrollable_frame.bind(
             "<Configure>",
-            lambda e: canvas.configure(
-                scrollregion=canvas.bbox("all")
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
             )
         )
 
         self.bind('<Configure>', self.regrid)
-        canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.pack(side="left", fill="both", expand=True)
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+        self.canvas.configure(yscrollcommand=scrollbar.set)
+        self.canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
     def regrid(self, event=None):
@@ -58,24 +58,32 @@ class ImageCard(tk.Frame):
     def __init__(self, master=None, **kwargs):
         tk.Frame.__init__(self, master, bd=1, relief=tk.RAISED, **kwargs)
         self.configure(width=300)
-
-        # tk.Checkbutton(self, text='filename').pack(pady=10)
-        # tk.Checkbutton(self, text='filename').pack(pady=10)
+        self.file_id = tk.IntVar()
+        self.image = tk.Button()
         self.check = tk.BooleanVar()
+        self.config(bg='#123456')
 
     def add_button(self, x):
         icon = generate_thumbnail(x[3])
-        image = tk.Button(self, image=icon, relief=tk.FLAT, height=130, width=130, pady=2, padx=2,
+        self.file_id = x[0]
+        self.image = tk.Button(self, image=icon, relief=tk.FLAT, height=130, width=130, pady=2, padx=2,bg='#123456',
                           command=lambda lan=x: stream_toImage(lan[3]).show())
-        image.image = icon
-        image.pack()
+        self.image.image = icon
+        self.image.pack()
 
         return self
 
     def add_file_name(self, filename):
+        # tk.Checkbutton(self, text=filename, variable=self.check, width=12, anchor='w',
+        #                command=lambda lan=self.check: self.toggle(lan.get())).pack(side=tk.LEFT)
         tk.Checkbutton(self, text=filename, variable=self.check, width=12, anchor='w',
-                       command=lambda lan=self.check: self.toggle(lan.get())).pack(side=tk.LEFT)
+                       command=lambda lan=self.check: toggle2(self,self.master.master.master, lan.get())).pack(side=tk.LEFT)
+        print(type(self.master.master.master))
         #self.hover = HoverInfo(self, filename)
+        return self
+
+    def add_file_id(self, fileid):
+        self.file_id = fileid
         return self
 
     def toggle(self, tf):
@@ -83,7 +91,20 @@ class ImageCard(tk.Frame):
             self.config(bg='#123456')
         else:
             self.config(bg='#654321')
+            print(self.selection_get())
+        self.master.selected
 
+def toggle2(button :ImageCard ,master :ScrollableFrame, tf):
+    if tf:
+        button.config(bg='#654321')
+        #master.config(bg='#654321')
+        master.selected_cards.append(button.file_id)
+    else:
+        button.config(bg='#123456')
+       # master.config(bg='#123456')
+
+        master.selected_cards.remove(button.file_id)
+    print(master.selected_cards)
 
 def stream_toImage(stream) -> Image:
     stream = BytesIO(stream)

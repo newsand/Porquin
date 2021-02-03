@@ -18,7 +18,7 @@ class Filebase:
 
     def createTable(self):
         '''
-        Method for Creating Table in User
+        Method for Creating Table in Files
         '''
         create_table = '''
         CREATE TABLE IF NOT EXISTS files    (
@@ -37,7 +37,7 @@ class Filebase:
 
     def insertFile(self, data):
         '''
-        Method for Insertig Data in Table in User
+        Method for Insertig Data in Table in Files
         '''
         insert_data = """
         INSERT INTO files(owner, filename, file)
@@ -48,7 +48,7 @@ class Filebase:
 
     def search_files_from_user(self, data):
         '''
-        Method for Searching Data in Table in User
+        Method for Searching Data in Table in Files
         '''
         search_data = '''
         SELECT * FROM files WHERE owner = (?);
@@ -60,14 +60,24 @@ class Filebase:
 
     def search_file(self, data):
         '''
-        Method for Searching Data in Table in User
+        Method for Searching Data in Table in Files
         '''
         search_data = '''
         SELECT * FROM files WHERE owner = (?) and id  = (?);
         '''
-        #print(data)
-        print(search_data)
         self.curr.execute(search_data, data)
+        rows = self.curr.fetchall()
+        return rows
+
+    def delete_files(self, data):
+        '''
+        Method for Delete Data in Table in Files
+        '''
+        search_data = '''
+        delete  FROM files WHERE  id  = (?);
+        '''
+        query = "DELETE FROM table WHERE id IN ({})".format(", ".join("?" * len(data)))
+        self.curr.execute(query, data)
         rows = self.curr.fetchall()
         return rows
 
