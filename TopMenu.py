@@ -56,10 +56,9 @@ class TopMenu(tk.Menu):
         cripted_file = self.encrypt(keyz, tocrip)
         self.save_file(cripted_file, file.split('/')[-1])
 
-    def delete(self, files: list):
-
+    def delete(self, filesid: list):
         files = Filebase()
-        files.delete_files(files)
+        files.delete_files(filesid)
         files.finish()
 
     def encrypt(self, key: bytes, file: bytes):

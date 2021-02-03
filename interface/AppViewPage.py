@@ -6,7 +6,6 @@ from Crypto.Cipher import Blowfish
 from Configleton import Configleton
 from TopMenu import TopMenu
 from interface import BootstrapGrid
-
 try:
     import Tkinter as tk
 except:
@@ -16,9 +15,6 @@ from io import BytesIO
 import PIL
 from PIL import Image
 from PIL.ImageTk import PhotoImage
-
-
-
 from User import *
 from FileBase import *
 
@@ -132,7 +128,6 @@ def decrypt(key, file):
 
     last_byte = msg[-1]
     msg = msg[:- (last_byte if type(last_byte) is int else ord(last_byte))]
-
     # return msg.decode('utf-8')
     return msg
 
@@ -141,5 +136,4 @@ def decrypt_image(file):
     keyz = Configleton.shared_instance().get_cryptokey().encode("utf-8")
     cripted_file = decrypt(keyz, file)
     stream = BytesIO(cripted_file).read()
-    # image = Image.open(stream).convert("RGBA")
     return stream

@@ -74,11 +74,10 @@ class ImageCard(tk.Frame):
         return self
 
     def add_file_name(self, filename):
-        # tk.Checkbutton(self, text=filename, variable=self.check, width=12, anchor='w',
+        #tk.Checkbutton(self, text=filename, variable=self.check, width=12, anchor='w',
         #                command=lambda lan=self.check: self.toggle(lan.get())).pack(side=tk.LEFT)
-        tk.Checkbutton(self, text=filename, variable=self.check, width=12, anchor='w',
+        tk.Checkbutton(self, text=filename, variable=self.check, width=12, anchor='w',bg=BGC, fg="grey",
                        command=lambda lan=self.check: toggle2(self,self.master.master.master, lan.get())).pack(side=tk.LEFT)
-        print(type(self.master.master.master))
         #self.hover = HoverInfo(self, filename)
         return self
 
@@ -96,13 +95,8 @@ class ImageCard(tk.Frame):
 
 def toggle2(button :ImageCard ,master :ScrollableFrame, tf):
     if tf:
-        button.config(bg='#654321')
-        #master.config(bg='#654321')
         master.selected_cards.append(button.file_id)
     else:
-        button.config(bg='#123456')
-       # master.config(bg='#123456')
-
         master.selected_cards.remove(button.file_id)
     print(master.selected_cards)
 

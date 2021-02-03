@@ -48,19 +48,18 @@ class Filebase:
 
     def search_files_from_user(self, data):
         '''
-        Method for Searching Data in Table in Files
+        Method for Searching Data in Table Files
         '''
         search_data = '''
         SELECT * FROM files WHERE owner = (?);
         '''
-        #print(data)
         self.curr.execute(search_data, data)
         rows = self.curr.fetchall()
         return rows
 
     def search_file(self, data):
         '''
-        Method for Searching Data in Table in Files
+        Method for Searching Data in Table  Files
         '''
         search_data = '''
         SELECT * FROM files WHERE owner = (?) and id  = (?);
@@ -71,15 +70,13 @@ class Filebase:
 
     def delete_files(self, data):
         '''
-        Method for Delete Data in Table in Files
+        Method for Delete Data in Table Files
         '''
-        search_data = '''
-        delete  FROM files WHERE  id  = (?);
-        '''
-        query = "DELETE FROM table WHERE id IN ({})".format(", ".join("?" * len(data)))
-        self.curr.execute(query, data)
-        rows = self.curr.fetchall()
-        return rows
+        query = "DELETE FROM files WHERE id IN ({})".format(", ".join("?" * len(data)))
+        print(query)
+        self.curr.execute(query, tuple(data))
+        self.conn.commit()
+        return
 
     def finish(self):
         try:
