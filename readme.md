@@ -21,6 +21,4 @@ The idea is simple and objective.
 4. Add as many files as you want
 
 ## Perspective
-* By this time, there is no way to delete a file in the project. 
-To do so, you must access the porquin_file using SQL. The default path is in the "config.conf" file.
 * Soon, I'll make available some MSI/DEB so anyone can use it without the boring part of compiling projects
