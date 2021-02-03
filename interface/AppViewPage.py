@@ -5,19 +5,19 @@ from Crypto import Random
 from Crypto.Cipher import Blowfish
 from Configleton import Configleton
 from TopMenu import TopMenu
+from interface import BootstrapGrid
 
 try:
     import Tkinter as tk
 except:
     import tkinter as tk
-from tkinter import Label, FLAT, Menu, BOTH, filedialog
+from tkinter import filedialog
 from io import BytesIO
 import PIL
 from PIL import Image
 from PIL.ImageTk import PhotoImage
 
-import MainWindow as MW
-import BootstrapGrid
+
 
 from User import *
 from FileBase import *
@@ -41,6 +41,7 @@ class AppViewPage(tk.Frame):
         self.master.minsize(height=300, width=350)
         self.menubar = TopMenu(self.master)
         self.menubar.vault.add_command(label="Save file to vault", command=self.save)
+        self.menubar.vault.add_command(label="Delete", command=self.delete)
         # headers
         tk.Label(self, text="PorkinVault", font=('Helvetica', 18, "bold"), bg=BGC, fg="white").pack(side="top", fill="x", pady=5)
         self.frame = BootstrapGrid.ScrollableFrame(self)
@@ -50,14 +51,19 @@ class AppViewPage(tk.Frame):
         self.menubar.save_to_vault()
         self.restore()
 
+    def delete(self):
+        self.menubar.delete(self.frame.selected_cards)
+        self.restore()
+
     def restore(self):
         self.frame.destroy()
         self.frame = BootstrapGrid.ScrollableFrame(self)
         files_array = files.search_files_from_user(Configleton.shared_instance()._USER)
 
         for iteration, x in enumerate(files_array):
+            print(x[0])
             y = (x[0], x[1], x[2], decrypt_image(x[3]))
-            BootstrapGrid.ImageCard(self.frame.scrollable_frame).add_button(y).add_file_name(x[2]).grid()
+            BootstrapGrid.ImageCard(self.frame.scrollable_frame).add_button(y).add_file_name(x[2]).add_file_id(x[0]).grid()
             self.frame.pack(side="left", fill=tk.BOTH, expand=True)
         return self.frame
 
