@@ -34,7 +34,7 @@ class LoginPage(tk.Frame):
         pass_entry.pack()
         login_button = Button(self, text="Login", command=self.validate)
         login_button.pack(fill='x',pady=5)
-        print(Configleton.shared_instance().get_cryptokey())
+        #print(Configleton.shared_instance().get_cryptokey())
 
     def validate(self):
         username = self.usernameS.get()

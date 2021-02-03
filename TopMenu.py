@@ -48,7 +48,6 @@ class TopMenu(tk.Menu):
 
     def save_to_vault(self):
         file = filedialog.askopenfilename(title="open")
-        print(file)
         rfile = open(file, 'rb')
         tocrip = rfile.read()
         rfile.close()

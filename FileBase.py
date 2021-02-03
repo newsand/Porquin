@@ -73,7 +73,6 @@ class Filebase:
         Method for Delete Data in Table Files
         '''
         query = "DELETE FROM files WHERE id IN ({})".format(", ".join("?" * len(data)))
-        print(query)
         self.curr.execute(query, tuple(data))
         self.conn.commit()
         return

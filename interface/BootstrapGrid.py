@@ -90,7 +90,6 @@ class ImageCard(tk.Frame):
             self.config(bg='#123456')
         else:
             self.config(bg='#654321')
-            print(self.selection_get())
         self.master.selected
 
 def toggle2(button :ImageCard ,master :ScrollableFrame, tf):
@@ -98,7 +97,6 @@ def toggle2(button :ImageCard ,master :ScrollableFrame, tf):
         master.selected_cards.append(button.file_id)
     else:
         master.selected_cards.remove(button.file_id)
-    print(master.selected_cards)
 
 def stream_toImage(stream) -> Image:
     stream = BytesIO(stream)

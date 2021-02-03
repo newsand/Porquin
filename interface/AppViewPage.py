@@ -57,7 +57,6 @@ class AppViewPage(tk.Frame):
         files_array = files.search_files_from_user(Configleton.shared_instance()._USER)
 
         for iteration, x in enumerate(files_array):
-            print(x[0])
             y = (x[0], x[1], x[2], decrypt_image(x[3]))
             BootstrapGrid.ImageCard(self.frame.scrollable_frame).add_button(y).add_file_name(x[2]).add_file_id(x[0]).grid()
             self.frame.pack(side="left", fill=tk.BOTH, expand=True)
